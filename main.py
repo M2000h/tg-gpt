@@ -1,6 +1,7 @@
 import logging
 import time
 from multiprocessing import Process
+from requests.exceptions import SSLError
 
 import telebot
 from environs import Env
@@ -8,6 +9,7 @@ from environs import Env
 from const import *
 from gpt import generate_answer
 from speech import synthesize, recognize
+from openai.error import ServiceUnavailableError
 
 telebot.apihelper.MAX_RETRIES = 100
 
@@ -39,6 +41,15 @@ def send_action(cid, action):
         time.sleep(5)
 
 
+def send_message(cid, text):
+    while True:
+        try:
+            bot.send_message(cid, text)
+            break
+        except SSLError:
+            continue
+
+
 def send_voice(answer, cid):
     synthesize(answer, "test.mp3")
     audio = open('test.mp3', 'rb')
@@ -46,43 +57,47 @@ def send_voice(answer, cid):
 
 
 def get_answer(cid, text):
-    users_messages[cid].append({"role": "user", "content": text})
-    answer = generate_answer(users_messages[cid])
-    users_messages[cid].append({"role": "assistant", "content": answer})
-    return answer
+    while True:
+        try:
+            users_messages[cid].append({"role": "user", "content": text})
+            answer = generate_answer(users_messages[cid])
+            users_messages[cid].append({"role": "assistant", "content": answer})
+            return answer
+        except Exception:
+            time.sleep(1)
 
 
 @bot.message_handler(commands=['start', 'help'])
 @check_user
 def command_help(message):
-    bot.send_message(message.chat.id, HELLO_TEXT)
+    send_message(message.chat.id, HELLO_TEXT)
 
 
 @bot.message_handler(commands=['clean'])
 def command_clean(message):
     users_messages[message.chat.id] = []
-    bot.send_message(message.chat.id, "История очищена.")
+    send_message(message.chat.id, "История очищена.")
 
 
 @bot.message_handler(commands=['auto'])
 @check_user
 def command_auto(message):
     users_status[message.chat.id] = 'auto'
-    bot.send_message(message.chat.id, "Теперь отвечаю текстом на текст и голосом на голос")
+    send_message(message.chat.id, "Теперь отвечаю текстом на текст и голосом на голос")
 
 
 @bot.message_handler(commands=['text'])
 @check_user
 def command_text(message):
     users_status[message.chat.id] = 'text'
-    bot.send_message(message.chat.id, "Теперь отвечаю всегда текстом")
+    send_message(message.chat.id, "Теперь отвечаю всегда текстом")
 
 
 @bot.message_handler(commands=['voice'])
 @check_user
 def command_voice(message):
     users_status[message.chat.id] = 'voice'
-    bot.send_message(message.chat.id, "Теперь отвечаю всегда голосом")
+    send_message(message.chat.id, "Теперь отвечаю всегда голосом")
 
 
 @bot.message_handler(content_types=['text'])
@@ -100,7 +115,7 @@ def handle_text(message):
     if users_status.get(message.chat.id) == 'voice':
         send_voice(answer, message.chat.id)
     else:
-        bot.send_message(message.chat.id, answer)
+        send_message(message.chat.id, answer)
 
 
 @bot.message_handler(content_types=['voice'])
@@ -122,10 +137,14 @@ def handle_voice(message):
     logging.info(f'{message.chat.id}: {answer[:10]}')
     t1.terminate()
     if users_status.get(message.chat.id) == 'text':
-        bot.send_message(message.chat.id, answer)
+        send_message(message.chat.id, answer)
     else:
         send_voice(answer, message.chat.id)
 
 
 if __name__ == '__main__':
-    bot.polling(non_stop=True)
+    while True:
+        try:
+            bot.polling()
+        except Exception as e:
+            logging.error(e)
