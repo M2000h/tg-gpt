@@ -5,6 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: tg-gpt
+    network_mode: "bridge"
     restart: always
     privileged: true
     dns:
