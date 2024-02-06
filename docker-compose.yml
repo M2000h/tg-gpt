@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: tg-gpt
     restart: always
     privileged: true
     dns:

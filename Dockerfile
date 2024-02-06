@@ -16,7 +16,4 @@ WORKDIR /app
 
 ENV PYTHONPATH "${PYTHONPATH}:/app"
 
-#CMD ["sh", "-c", "openvpn --config /etc/openvpn/client.conf"]
 CMD ["sh", "-c", "openvpn --config /etc/openvpn/client.conf --daemon && python main.py"]
-
-#CMD ["python", "main.py"]

@@ -11,7 +11,14 @@ openai.api_key = env.str("OPENAI_TOKEN")
 SYSTEM_TEXT = "Ты - шальной бот помошник джарвис."
 
 
-def generate_answer(history: List):
+def generate_answer(history: List) -> str:
+    """
+    Generate answer from GPT
+    :param history: message history
+    :type history: list
+    :return: answer
+    :rtype: str
+    """
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-16k",
         messages=history,
@@ -29,6 +36,6 @@ if __name__ == '__main__':
     import datetime
 
     print(datetime.datetime.now().time())
-    history = [{"role": "user", "content": "Кто ты?"}]
-    print(generate_answer(history))
+    history1 = [{"role": "user", "content": "Кто ты?"}]
+    print(generate_answer(history1))
     print(datetime.datetime.now().time())

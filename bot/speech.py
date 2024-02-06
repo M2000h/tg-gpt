@@ -13,7 +13,14 @@ configure_credentials(
 )
 
 
-def synthesize(text, export_path):
+def synthesize(text: str, export_path: str) -> None:
+    """
+    Generate audio from text
+    :param text: user's text for synthesize
+    :type text: str
+    :param export_path: export filepath
+    :type export_path: str
+    """
     model = model_repository.synthesis_model()
     model.voice = 'zahar'
     model.role = 'neutral'
@@ -21,7 +28,14 @@ def synthesize(text, export_path):
     result.export(export_path, 'mp3')
 
 
-def recognize(audio):
+def recognize(audio: str):
+    """
+    Recognize text from audio
+    :param audio: filepath to audiofile
+    :type audio: str
+    :return: recognized text
+    :rtype: str
+    """
     model = model_repository.recognition_model()
     model.model = 'general'
     model.language = 'ru-RU'
@@ -35,5 +49,5 @@ def recognize(audio):
 
 
 if __name__ == '__main__':
-    text = "Привет мир, как дела 123?"
-    synthesize(text, "test.mp3")
+    text1 = "Привет мир, как дела 123?"
+    synthesize(text1, "test.mp3")
