@@ -9,7 +9,6 @@ from environs import Env
 from const import *
 from gpt import generate_answer
 from speech import synthesize, recognize
-from openai.error import ServiceUnavailableError
 
 telebot.apihelper.MAX_RETRIES = 100
 

@@ -11,7 +11,7 @@ RUN chmod 600 /etc/openvpn/credentials.txt
 
 COPY test.ovpn /etc/openvpn/client.conf
 
-COPY . /app
+COPY bot /app
 WORKDIR /app
 
 ENV PYTHONPATH "${PYTHONPATH}:/app"

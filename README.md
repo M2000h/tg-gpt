@@ -1,25 +1,41 @@
-# tg-gpt
+# 🤖 ChatGPT telegram bot
 
-```bash
-docker build . -t tg-gpt
-```
+![image](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)
+![image](https://img.shields.io/badge/ChatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
+![image](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
+![image](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
 
-```bash
-docker run -d --restart=always --name tg-gpt tg-gpt
-```
+Implementation of ChatGPT in telegram bot.
 
-```bash
-docker run -d --restart=always  --privileged --dns 1.1.1.1 --sysctl net.ipv6.conf.all.disable_ipv6=0 --cap-add=NET_ADMIN --device=/dev/net/tun --name tg-gpt tg-gpt
-```
+## 🚀 Getting started
 
-```bash
-docker tag  tg-gpt cr.yandex/crpp8ardv4ho3uda0ghk/tg-gpt:hello
-```
+### Get VPN
 
-```bash
-docker push cr.yandex/crpp8ardv4ho3uda0ghk/tg-gpt:hello
-```
+To use ChatGPT API you need a VPN (currently this bot working with OpenVPN).
+You can get OpenVPN config [here](https://t.me/FCK_RKN_bot)
 
-```bash
-docker run -d --restart=always --name tg-gpt-test cr.yandex/crpp8ardv4ho3uda0ghk/tg-gpt:hello
-```
+### Set credentials
+
+Create `credetionals.txt` file and put there your vpn credentials (login and password line by line)
+
+### Set config
+
+Create `test.ovpn` and put there OpenVPN config.
+Change line `auth-user-pass` to `auth-user-pass /etc/openvpn/credentials.txt`
+
+## 🛠️ Build and run
+
+To start bot run docker compose:
+
+`docker compose up --build`
+
+## 🔐 Environment
+
+In the `.env` file, or through the `-e` flags, you must set the required variables from
+tables below.
+
+| Variable       | Default        | Description             |
+|----------------|----------------|-------------------------|
+| `BOT_TOKEN`    | **(required)** | Telegram bot token      |
+| `OPENAI_TOKEN` | **(required)** | OpenAI API token        |
+| `YA_TOKEN`     | **(required)** | Yandex speech kit token |
