@@ -193,4 +193,4 @@ if __name__ == '__main__':
 	Time for OpenVPN starts
 	"""
 	time.sleep(5)
-	bot.polling(True, timeout=5)
+	bot.polling()
