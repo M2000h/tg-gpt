@@ -17,7 +17,7 @@ env.read_env(".env")
 log_format = "%(asctime)s - %(levelname)s - %(message)s"
 logging.basicConfig(format=log_format, level=logging.INFO)
 
-bot = telebot.TeleBot(env.str("BOT_TOKEN"), threaded=True, num_threads=20, parse_mode="MARKDOWN")
+bot = telebot.TeleBot(env.str("BOT_TOKEN"), threaded=True, parse_mode="MARKDOWN")
 
 users_status = {}
 users_messages = {}

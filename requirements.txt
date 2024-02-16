@@ -1,4 +1,9 @@
 pyTelegramBotAPI~=4.14.0
 openai~=0.28.1
 environs~=9.3.1
-yandex-speechkit~=1.3.3
+grpcio==1.60.1
+grpcio-tools==1.60.1
+protobuf==4.25.3
+pydub==0.25.1
+requests==2.31.0
+#yandex-speechkit~=1.3.3
